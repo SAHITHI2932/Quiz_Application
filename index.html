@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <link rel="stylesheet" href="./style.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="timerandscore">
+            <h2 id="timer"> TIME LEFT: <span id="time">220</span> seconds</h2>
+
+            <h2 id="score">SCORE: <span id="marks"></span></h2>
+
+        </div>
+
+        <div class="questionnumber">
+            <h2 id="number"></h2>
+        </div>
+        <div class="question" id="quiz">
+            <h2 id="question_conatiner"></h2>
+            <div id="option_container"></div>
+            <p id="display"> </p>
+            <button onclick="nextquestion()" id="click"> NEXT</button>
+            <div id="result"></div>
+           
+
+        </div>
+    </div>
+<script>
+    const quizdata = [
+    {
+    question: 'Which animal is known as the "Ship of the Desert"?',
+    options: ['Camel', 'Kangaroo', 'Zebra', 'Girafee'],
+    answer: 'Camel'
+},
+{
+    question: '1024 Kilobytes is equal to?',
+    options: ['1MB', '1GB', '1TB', '10MB'],
+    answer: '1MB'
+},
+{
+    question: 'Which country are the Giza Pyramids in?',
+    options: ['France', 'USA', 'UK', 'Egypt'],
+    answer: 'Egypt'
+},
+{
+    question: 'How many Cricket world cups does India have?',
+    options: ['2', '3', '1', '5'],
+    answer: '2'
+},
+{
+    question:'Smallest state of India is?',
+    options: ['Uttarakhand', 'HimachalPradesh', 'Rajasthan', 'Goa'],
+    answer: 'Goa'
+},
+{
+    question: 'Cataract is the disease of?',
+    options: ['Eyes', 'Ears', 'Nose', 'Skin'],
+    answer: 'Eyes'
+},
+{
+    question: 'Which organ purify our blood?',
+    options: ['Lungs', 'Heart', 'Intestine', 'Kidney'],
+    answer: 'Kidney'
+},
+{
+    question: 'Capital of Uttarakhand is?',
+    options: ['Telangana', 'sikkim', 'Dehradun', 'panaji'],
+    answer: 'Dehradun'
+},
+{
+    question: 'Agra is situated on the bank of river?',
+    options: ['Godavari', 'Krishna', 'Yamuna', 'Nile'],
+    answer: 'Yamuna'
+},
+{
+    question: 'Fastest animal on earth is?',
+    options: ['Lion', 'Tiger', 'Deer', 'Cheetah'],
+    answer: 'Cheetah'
+}
+
+    ];
+
+    let currentquestion = 0;
+    let marks = 0;
+    let timeleft=220;
+    const timer=document.getElementById('time');
+    const timeinterval=setInterval(function(){
+        timeleft--;
+        timer.textContent=timeleft;
+
+        if (timeleft<=0){
+            clearInterval(timeinterval);
+            alert('time is over');
+        }
+    },1000);
+
+    const lenght = quizdata.length;
+    // console.log(lenght);
+
+    // console.log(quizdata.length);
+    function loadquestion() {
+        const question_conatiner = document.getElementById('question_conatiner');
+        const option_container = document.getElementById('option_container');
+        const number = document.getElementById('number');
+
+        question_conatiner.innerHTML = quizdata[currentquestion].question;
+
+        option_container.innerHTML = '';
+        quizdata[currentquestion].options.forEach(option => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.addEventListener('click', () => {
+                button.style.backgroundColor = 'rgb(63, 197, 241)';
+                button.style.color = 'white';
+            })
+            button.addEventListener('click', () => selectanswer(option));
+            option_container.appendChild(button);
+        })
+
+        number.innerHTML = `${[currentquestion+1]} / ${lenght}`;
+
+       
+    }
+
+    function selectanswer(selectedoption) {
+        const answer = quizdata[currentquestion].answer;
+
+        if (selectedoption === answer) {
+
+            display.innerHTML = selectedoption + ': <h4>your answer is correct</h4>';
+            marks++
+            const mark = document.getElementById('marks').innerHTML= `${marks} / 10`;
+        } else {
+
+            display.innerHTML = selectedoption + ':<h4> answer is wrong </h4> <br> The correct Answer is :' + answer;
+           
+        }
+        const answerButtons = document.querySelectorAll('#option_container button');
+answerButtons.forEach(button => {
+    button.disabled = true;
+});
+
+        currentquestion++;
+    }
+
+    const click = document.getElementById('click');
+    click.addEventListener('mouseover', () => {
+        click.style.backgroundColor = 'rgb(63, 197, 241)';
+        click.style.color = 'white';
+    })
+
+    click.addEventListener('mouseout', () => {
+        click.style.backgroundColor = 'white';
+        click.style.color = 'rgb(63, 197, 241)';
+    })
+
+    function nextquestion() {
+
+       
+        display.innerHTML = '';
+        if (currentquestion < quizdata.length) {
+            loadquestion();
+        } else {
+            submitanswer();
+        }
+    }
+
+    function submitanswer() {
+        const printscore = document.getElementById('result');
+        printscore.innerhtml=`<h4> your total marks is ${score} out of 10 </h4>`;
+
+        // alert('your total marks is = ', score);
+    }
+
+    loadquestion();
+
+</script>
+</body>
+</html>
